@@ -1,0 +1,45 @@
+---
+title: "Practica2"
+output: html_document
+date: "2025-01-13"
+---
+
+```{r setup, include=FALSE}
+require(httr)
+require(xml2)
+require(rvest)
+require(tidytable)
+require(dplyr)
+require(purrr)
+```
+
+
+```{r}
+html <- read_html("https://www.mediawiki.org/wiki/MediaWiki")
+title <- html %>% html_elements("title") %>% html_text2()
+print(title)
+```
+
+```{r}
+parse_href <- function(href) {
+  if(startsWith(href,"#")>1){
+    #return(paste("http:/dddd", href))
+    return("ddd")
+  }else{
+    return(href)
+  }
+}
+
+parse_href_v <- Vectorize(parse_href)
+
+links <- data.frame(
+  href = html %>% html_elements("a") %>% html_attr("href"),
+  text = html %>% html_elements("a") %>% html_text()
+)
+
+# Cleanup data
+links %>% na.omit()
+links <- links %>% mutate(href2 = parse_href_v(href))
+
+show(links)
+```
