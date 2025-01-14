@@ -31,21 +31,21 @@ parse_href <- function(href) {
 }
 parse_href_v <- Vectorize(parse_href)
 
-# 0 - relativa
-# 1 - absoluta
-parse_href_type <- function(href) {
+# FALSE - relativa
+# TRUE - absoluta
+href_is_absolute <- function(href) {
   href_clean <- str_trim(href)
   ifelse(
     startsWith(href_clean, "#"),
-    0,
+    FALSE,
     ifelse(
       startsWith(href_clean, "/"),
-      0,
-      1
+      FALSE,
+      TRUE
     )
   )
 }
-parse_href_type_v <- Vectorize(parse_href_type)
+href_is_absolute_v <- Vectorize(href_is_absolute)
 
 check_link <- function(href) {
   Sys.sleep(0.2)
@@ -73,28 +73,37 @@ raw_links <- data.frame(
   text = a_objects %>% html_text()
 )
 
-raw_links <- raw_links %>% slice_head(n = 10) # processa nomes el top 10
+#raw_links <- raw_links %>% slice_head(n = 10) # processa nomes el top 10
 ```
 
 ```{r transform_data}
 links <- raw_links %>%
   na.omit() %>%
   count(href, text, name = "freq") %>%
-  mutate(href_type = parse_href_type_v(href)) %>%
-  mutate(href = parse_href_v(href)) %>%
+  mutate(is_absoulte = href_is_absolute_v(href)) %>%
+  mutate(href_full = parse_href_v(href)) %>%
   rowwise() %>%
-  mutate(status = check_link_v(href))
+  mutate(status = check_link_v(href_full))
 
-show(links)
+save(links,file="links.Rda")
 ```
 
 ```{r display_data}
+load("links.Rda")
+
 links %>%
+  select(-is_absoulte,-href_full) %>%
   kbl(
-    caption = ,
-    #col.names = c("Enlace", "Texto", "Visto", "Estado", "Tipo"),
+    col.names = c("Enlace", "Texto", "Visto", "Estado"),
     align = "llccc",
   ) %>%
-  add_header_above(c("Cabecera" = 1, setNames(4, title))) %>%
+  add_header_above(c("Cabecera" = 1, setNames(3, title))) %>%
   kable_styling(bootstrap_options = c("responsive"))
+
+```
+
+```{r}
+hist(x = links$freq, breaks=30, xlim=c(0,300), col=rgb(1,0,0,0.5), xlab="height", 
+     ylab="nbr of plants", main="distribution of height of 2 durum wheat varieties" )
+
 ```
