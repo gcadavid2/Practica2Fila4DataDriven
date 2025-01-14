@@ -13,31 +13,37 @@ require(dplyr)
 require(purrr)
 ```
 
-
-```{r}
-FULL_URL_CONST <- "https://www.mediawiki.org/wiki/MediaWiki"
-BASE_URL_CONST <- "https://www.mediawiki.org"
-
-html <- read_html(BASE_URL_CONST)
-title <- html %>% html_elements("title") %>% html_text2()
-print(title)
-```
-
-```{r}
+```{r functions, include=FALSE}
 parse_href <- function(href) {
-  if(startsWith(href,"#")){
-    return(gsub("^#", FULL_URL_CONST,href))
-  } else if(gsub("^/", BASE_URL_CONST, href))
-  }else{
+  if (startsWith(href, "#")) {
+    return(gsub("^#", FULL_URL_CONST, href))
+  } else if (startsWith(href, "/")) {
+    return(gsub("^/", BASE_URL_CONST, href))
+  } else {
     return(href)
   }
 }
 
 parse_href_v <- Vectorize(parse_href)
+```
 
+```{r globals, include=FALSE}
+FULL_URL_CONST <- "https://www.mediawiki.org/wiki/MediaWiki/"
+BASE_URL_CONST <- "https://www.mediawiki.org/"
+```
+
+```{r read_raw_data}
+html <- read_html(BASE_URL_CONST)
+title <- html %>%
+  html_elements("title") %>%
+  html_text2()
+a_objects <- html %>% html_elements("a")
+```
+
+```{r transform_data}
 links <- data.frame(
-  href = html %>% html_elements("a") %>% html_attr("href"),
-  text = html %>% html_elements("a") %>% html_text()
+  href = a_objects %>% html_attr("href"),
+  text = a_objects %>% html_text()
 )
 
 # Cleanup data
