@@ -73,7 +73,7 @@ raw_links <- data.frame(
   text = a_objects %>% html_text()
 )
 
-raw_links <- raw_links %>% slice_head(n = 10) # processa nomes el top 10
+#raw_links <- raw_links %>% slice_head(n = 10) # processa nomes el top 10
 ```
 
 ```{r transform_data}
@@ -81,20 +81,23 @@ links <- raw_links %>%
   na.omit() %>%
   count(href, text, name = "freq") %>%
   mutate(href_type = parse_href_type_v(href)) %>%
-  mutate(href = parse_href_v(href)) %>%
+  mutate(href_full = parse_href_v(href)) %>%
   rowwise() %>%
-  mutate(status = check_link_v(href))
+  mutate(status = check_link_v(href_full))
 
-show(links)
+save(links,file="links.Rda")
 ```
 
 ```{r display_data}
+load("links.Rda")
+
 links %>%
+  select(-href_type,-href_full) %>%
   kbl(
     caption = ,
-    #col.names = c("Enlace", "Texto", "Visto", "Estado", "Tipo"),
+    col.names = c("Enlace", "Texto", "Visto", "Estado"),
     align = "llccc",
   ) %>%
-  add_header_above(c("Cabecera" = 1, setNames(4, title))) %>%
+  add_header_above(c("Cabecera" = 1, setNames(3, title))) %>%
   kable_styling(bootstrap_options = c("responsive"))
 ```
