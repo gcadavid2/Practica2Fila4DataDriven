@@ -15,16 +15,19 @@ require(purrr)
 
 
 ```{r}
-html <- read_html("https://www.mediawiki.org/wiki/MediaWiki")
+FULL_URL_CONST <- "https://www.mediawiki.org/wiki/MediaWiki"
+BASE_URL_CONST <- "https://www.mediawiki.org"
+
+html <- read_html(BASE_URL_CONST)
 title <- html %>% html_elements("title") %>% html_text2()
 print(title)
 ```
 
 ```{r}
 parse_href <- function(href) {
-  if(startsWith(href,"#")>1){
-    #return(paste("http:/dddd", href))
-    return("ddd")
+  if(startsWith(href,"#")){
+    return(gsub("^#", FULL_URL_CONST,href))
+  } else if(gsub("^/", BASE_URL_CONST, href))
   }else{
     return(href)
   }
