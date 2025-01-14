@@ -11,35 +11,73 @@ require(rvest)
 require(tidytable)
 require(dplyr)
 require(purrr)
+require(stringr)
+require(knitr)
+require(kableExtra)
 ```
 
-
-```{r}
-html <- read_html("https://www.mediawiki.org/wiki/MediaWiki")
-title <- html %>% html_elements("title") %>% html_text2()
-print(title)
-```
-
-```{r}
+```{r functions, include=FALSE}
 parse_href <- function(href) {
-  if(startsWith(href,"#")>1){
-    #return(paste("http:/dddd", href))
-    return("ddd")
-  }else{
-    return(href)
-  }
+  href_clean <- str_trim(href)
+  ifelse(
+    startsWith(href_clean, "#"),
+    paste(FULL_URL_CONST, href_clean, sep = ""),
+    ifelse(
+      startsWith(href_clean, "/"),
+      gsub("^/", BASE_URL_CONST, href_clean),
+      href_clean
+    )
+  )
 }
-
 parse_href_v <- Vectorize(parse_href)
 
-links <- data.frame(
-  href = html %>% html_elements("a") %>% html_attr("href"),
-  text = html %>% html_elements("a") %>% html_text()
+check_link <- function(href) {
+  Sys.sleep(0.2);
+  response <- GET(href)
+  status_code(response)
+}
+check_link_v <- Vectorize(check_link)
+```
+
+```{r globals, include=FALSE}
+FULL_URL_CONST <- "https://www.mediawiki.org/wiki/MediaWiki/"
+BASE_URL_CONST <- "https://www.mediawiki.org/"
+```
+
+```{r read_and_process_raw_data}
+html <- read_html(BASE_URL_CONST)
+
+title <- html %>%
+  html_elements("title") %>%
+  html_text2()
+a_objects <- html %>% html_elements("a")
+
+raw_links <- data.frame(
+  href = a_objects %>% html_attr("href"),
+  text = a_objects %>% html_text()
 )
 
-# Cleanup data
-links %>% na.omit()
-links <- links %>% mutate(href2 = parse_href_v(href))
+raw_links <- raw_links %>% slice_head(n = 10) # processa nomes el top 10
 
-show(links)
+```
+
+```{r transform_data}
+links <- raw_links %>%
+  na.omit() %>%
+  mutate(href = parse_href(href)) %>%
+  count(href, text, name = "freq") %>%
+  rowwise() %>%
+  mutate(status = check_link_v(href))
+
+```
+
+```{r display_data}
+links %>%
+    kbl(
+      caption = ,
+      col.names = c("Enlace","Texto","Visto","Estado"),
+      align = "llcc",
+    ) %>%
+    add_header_above(c("Cabecera" = 1, "ddd" = 3),align = "ll") %>%
+    kable_styling()
 ```
