@@ -14,6 +14,16 @@ require(purrr)
 require(stringr)
 require(knitr)
 require(kableExtra)
+require(tidyr)
+require(ggplot2)
+```
+
+```{r globals, include=FALSE}
+FULL_URL_CONST <- "https://www.mediawiki.org/wiki/MediaWiki/"
+BASE_URL_CONST <- "https://www.mediawiki.org/"
+
+# Set to TRUE to not scrape the data from the link and use the cached (saved) data.
+USE_CACHE_DATA <- TRUE
 ```
 
 ```{r functions, include=FALSE}
@@ -31,8 +41,6 @@ parse_href <- function(href) {
 }
 parse_href_v <- Vectorize(parse_href)
 
-# FALSE - relativa
-# TRUE - absoluta
 href_is_absolute <- function(href) {
   href_clean <- str_trim(href)
   ifelse(
@@ -55,11 +63,6 @@ check_link <- function(href) {
 check_link_v <- Vectorize(check_link)
 ```
 
-```{r globals, include=FALSE}
-FULL_URL_CONST <- "https://www.mediawiki.org/wiki/MediaWiki/"
-BASE_URL_CONST <- "https://www.mediawiki.org/"
-```
-
 ```{r read_and_process_raw_data, include=FALSE}
 html <- read_html(BASE_URL_CONST)
 
@@ -73,37 +76,99 @@ raw_links <- data.frame(
   text = a_objects %>% html_text()
 )
 
-#raw_links <- raw_links %>% slice_head(n = 10) # processa nomes el top 10
+# raw_links <- raw_links %>% slice_head(n = 50) # processa nomes el top 10
 ```
 
-```{r transform_data}
-links <- raw_links %>%
-  na.omit() %>%
-  count(href, text, name = "freq") %>%
-  mutate(is_absoulte = href_is_absolute_v(href)) %>%
-  mutate(href_full = parse_href_v(href)) %>%
-  rowwise() %>%
-  mutate(status = check_link_v(href_full))
-
-save(links,file="links.Rda")
+```{r transform_data, include=FALSE}
+if (!USE_CACHE_DATA) {
+  links <- raw_links %>%
+    na.omit() %>%
+    count(href, text, name = "freq") %>%
+    mutate(is_absoulte = href_is_absolute_v(href)) %>%
+    mutate(href_full = parse_href_v(href)) %>%
+    rowwise() %>%
+    mutate(status = check_link_v(href_full))
+  save(links, file = "links.Rda")
+}
 ```
 
 ```{r display_data}
 load("links.Rda")
 
 links %>%
-  select(-is_absoulte,-href_full) %>%
+  arrange(desc(freq)) %>%
+  select(-is_absoulte, -href_full) %>%
   kbl(
     col.names = c("Enlace", "Texto", "Visto", "Estado"),
     align = "llccc",
   ) %>%
   add_header_above(c("Cabecera" = 1, setNames(3, title))) %>%
   kable_styling(bootstrap_options = c("responsive"))
-
 ```
 
-```{r}
-hist(x = links$freq, breaks=30, xlim=c(0,300), col=rgb(1,0,0,0.5), xlab="height", 
-     ylab="nbr of plants", main="distribution of height of 2 durum wheat varieties" )
 
+```{r pregunta_2, include=FALSE}
+links_absolute <- filter(links, is_absoulte) %>%
+  arrange(desc(freq)) %>%
+  select(href_full, freq)
+
+links_relative <- filter(links, !is_absoulte) %>%
+  arrange(desc(freq)) %>%
+  select(href_full, freq)
+
+links_counts <- links %>%
+  group_by(link_type = ifelse(grepl(BASE_URL_CONST, href_full), "internal", "external")) %>%
+  summarise(total = n())
+
+status_percentage <- links %>%
+  group_by(status) %>%
+  summarise(total = n() / nrow(links) * 100)
+
+status_percentage$status <- factor(status_percentage$status)
+```
+
+
+```{r pregunta_2_grafico_1}
+ggplot() +
+  geom_col(data = links_relative, aes(x = href_full, y = freq, fill = "Relative"), width = 0.6, position = "identity") +
+  geom_col(data = links_absolute, aes(x = href_full, y = freq, fill = "Absolute"), width = 0.6, position = "identity") +
+  labs(
+    title = "Frecuencia de aparcion de enlaces absolutos y relativos",
+    x = "Enlace",
+    y = "Frequencia",
+    fill = "Tipo de enlace"
+  ) +
+  scale_fill_manual(
+    labels = c("Relative" = "Enlaces relativos", "Absolute" = "Enlaces absolutos"),
+    values = c("Relative" = "blue", "Absolute" = "red")
+  ) +
+  theme(legend.position = "right")
+```
+
+```{r pregunta_2_grafico_2}
+ggplot(links_counts, aes(x = link_type, y = total, fill = link_type)) +
+  geom_bar(stat = "identity") +
+  labs(
+    title = "Enlaces externos vs internos",
+    x = "Tipo de enlace",
+    y = "Número de enlaces"
+  ) +
+  scale_fill_manual(
+    name   = "Tipo de Enlace",
+    values = c("internal" = "blue", "external" = "red"),
+    labels = c("internal" = "Internos", "external" = "Externos")
+  ) +
+  theme(legend.position = "right")
+```
+
+```{r pregunta_2_grafico_3}
+ggplot(status_percentage, aes(x = "", y = total, fill = status)) +
+  geom_col(width = 1, color = "white") +
+  coord_polar("y", start = 0) +
+  labs(
+    title = "Estado de los enlaces",
+    fill  = "Estado"
+  ) +
+  theme_void() +
+  theme(legend.position = "right")
 ```
