@@ -1,0 +1,614 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+\usepackage{xcolor}
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Practica2},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Practica2}
+\author{}
+\date{\vspace{-2.5em}2025-01-13}
+
+\begin{document}
+\maketitle
+
+\subsection{PREGUNTA 1}\label{pregunta-1}
+
+\#\#1 Descargar la página web de la URL indicada, y almacenarlo en un
+formato de R apto para ser tratado. El primer paso para realizar tareas
+de crawling y scraping es poder descargar los datos de la web. Para esto
+usaremos la capacidad de R y de sus librerías (httr y XML) para
+descargar webs y almacenarlas en variables que podamos convertir en un
+formato fácil de analizar (p.e. de HTML a XML).
+
+\#\#2 Analizar el contenido de la web, buscando el título de la página
+(que en HTML se etiqueta como ``title'').
+
+\#\#3 Analizar el contenido de la web, buscando todos los enlaces (que
+en HTML se etiquetan como ``a''), buscando el texto del enlace, así como
+la URL.
+
+\subsection{4}\label{section}
+
+Generar una tabla con cada enlace encontrado, indicando el texto que
+acompaña el enlace, y el número de veces que aparece un enlace con ese
+mismo objetivo.
+
+\subsection{5}\label{section-1}
+
+Para cada enlace, seguirlo e indicar si está activo (podemos usar el
+código de status HTTP al hacer una petición a esa URL).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{load}\NormalTok{(}\StringTok{"links.Rda"}\NormalTok{)}
+
+\NormalTok{links }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{arrange}\NormalTok{(}\FunctionTok{desc}\NormalTok{(freq)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{select}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{is\_absoulte, }\SpecialCharTok{{-}}\NormalTok{href\_full) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{kbl}\NormalTok{(}
+    \AttributeTok{col.names =} \FunctionTok{c}\NormalTok{(}\StringTok{"Enlace"}\NormalTok{, }\StringTok{"Texto"}\NormalTok{, }\StringTok{"Visto"}\NormalTok{, }\StringTok{"Estado"}\NormalTok{),}
+    \AttributeTok{align =} \StringTok{"llccc"}\NormalTok{,}
+\NormalTok{  ) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{add\_header\_above}\NormalTok{(}\FunctionTok{c}\NormalTok{(}\StringTok{"Cabecera"} \OtherTok{=} \DecValTok{1}\NormalTok{, }\FunctionTok{setNames}\NormalTok{(}\DecValTok{3}\NormalTok{, title))) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{kable\_styling}\NormalTok{(}\AttributeTok{bootstrap\_options =} \FunctionTok{c}\NormalTok{(}\StringTok{"responsive"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{table}
+\centering
+\begin{tabular}[t]{l|l|c|c}
+\hline
+\multicolumn{1}{c|}{Cabecera} & \multicolumn{3}{c}{MediaWiki} \\
+\cline{1-1} \cline{2-4}
+Enlace & Texto & Visto & Estado\\
+\hline
+\# &  & 7 & 200\\
+\hline
+/w/index.php?title=MediaWiki\&action=edit & View source & 2 & 200\\
+\hline
+/w/index.php?title=MediaWiki\&action=history & View history & 2 & 200\\
+\hline
+/wiki/MediaWiki & Read & 2 & 200\\
+\hline
+/wiki/Special:MyLanguage/Manual:FAQ & FAQ & 2 & 200\\
+\hline
+https://donate.wikimedia.org/?wmf\_source=donate\&wmf\_medium=sidebar\&wmf\_campaign=www.mediawiki.org\&uselang=en & Donate & 2 & 200\\
+\hline
+\# & Add topic & 1 & 200\\
+\hline
+\# & English & 1 & 200\\
+\hline
+\#bodyContent & Jump to content & 1 & 200\\
+\hline
+//commons.wikimedia.org/wiki/Special:UploadWizard & Upload file & 1 & 404\\
+\hline
+//m.mediawiki.org/w/index.php?title=MediaWiki\&mobileaction=toggle\_view\_mobile & Mobile view & 1 & 404\\
+\hline
+/w/index.php?title=MediaWiki\&action=info & Page information & 1 & 200\\
+\hline
+/w/index.php?title=MediaWiki\&oldid=6287429 & Permanent link & 1 & 200\\
+\hline
+/w/index.php?title=MediaWiki\&printable=yes & Printable version & 1 & 200\\
+\hline
+/w/index.php?title=Special:Book\&bookcmd=book\_creator\&referer=MediaWiki & Create a book & 1 & 200\\
+\hline
+/w/index.php?title=Special:CiteThisPage\&page=MediaWiki\&id=6287429\&wpFormIdentifier=titleform & Cite this page & 1 & 200\\
+\hline
+/w/index.php?title=Special:CreateAccount\&returnto=MediaWiki & Create account & 1 & 200\\
+\hline
+/w/index.php?title=Special:CreateAccount\&returnto=MediaWiki & Create account & 1 & 200\\
+\hline
+/w/index.php?title=Special:DownloadAsPdf\&page=MediaWiki\&action=show-download-screen & Download as PDF & 1 & 200\\
+\hline
+/w/index.php?title=Special:QrCode\&url=https\%3A\%2F\%2Fwww.mediawiki.org\%2Fwiki\%2FMediaWiki & Download QR code & 1 & 200\\
+\hline
+/w/index.php?title=Special:UrlShortener\&url=https\%3A\%2F\%2Fwww.mediawiki.org\%2Fwiki\%2FMediaWiki & Get shortened URL & 1 & 200\\
+\hline
+/w/index.php?title=Special:UserLogin\&returnto=MediaWiki & Log in & 1 & 200\\
+\hline
+/w/index.php?title=Special:UserLogin\&returnto=MediaWiki & Log in & 1 & 200\\
+\hline
+/wiki/Category:Languages\_pages & Languages pages & 1 & 200\\
+\hline
+/wiki/Development\_statistics & Code statistics & 1 & 200\\
+\hline
+/wiki/Download & Get MediaWiki & 1 & 200\\
+\hline
+/wiki/File:Wikimedia\_Hackathon\_2024\_-\_Group\_photo,\_360\_cam.jpg &  & 1 & 200\\
+\hline
+/wiki/Help:Contents &  & 1 & 200\\
+\hline
+/wiki/Help:Editing\_pages &  & 1 & 200\\
+\hline
+/wiki/Help:Introduction & learn more & 1 & 404\\
+\hline
+/wiki/Help:Navigation &  & 1 & 200\\
+\hline
+/wiki/How\_to\_report\_a\_bug &  & 1 & 200\\
+\hline
+/wiki/MediaWiki &  & 1 & 200\\
+\hline
+/wiki/MediaWiki & Main Page & 1 & 200\\
+\hline
+/wiki/MediaWiki & Main page & 1 & 200\\
+\hline
+/wiki/Professional\_development\_and\_consulting &  & 1 & 200\\
+\hline
+/wiki/Project:About & About mediawiki.org & 1 & 200\\
+\hline
+/wiki/Project:General\_disclaimer & Disclaimers & 1 & 200\\
+\hline
+/wiki/Project:Help & Community portal & 1 & 200\\
+\hline
+/wiki/Project:Language\_policy &  & 1 & 200\\
+\hline
+/wiki/Project:Sandbox & Sandbox & 1 & 200\\
+\hline
+/wiki/Project:Support\_desk & Support desk & 1 & 200\\
+\hline
+/wiki/Project:Support\_desk & support desk & 1 & 200\\
+\hline
+/wiki/Project:Village\_Pump & Village pump & 1 & 200\\
+\hline
+/wiki/Special:LanguageStats & Translate content & 1 & 200\\
+\hline
+/wiki/Special:MyContributions & Contributions & 1 & 200\\
+\hline
+/wiki/Special:MyLanguage/Category:Extensions & Get extensions & 1 & 200\\
+\hline
+/wiki/Special:MyLanguage/Communication & Communication & 1 & 200\\
+\hline
+/wiki/Special:MyLanguage/Developer\_hub & developer documentation & 1 & 200\\
+\hline
+/wiki/Special:MyLanguage/Download & Download & 1 & 200\\
+\hline
+/wiki/Special:MyLanguage/Help:Contents & Learn more about reading, editing, and personal customisation & 1 & 200\\
+\hline
+/wiki/Special:MyLanguage/Help:Contents & User help & 1 & 200\\
+\hline
+/wiki/Special:MyLanguage/Help:Editing\_pages & Learn how to edit a page & 1 & 200\\
+\hline
+/wiki/Special:MyLanguage/Help:Navigation & Learn how to navigate & 1 & 200\\
+\hline
+/wiki/Special:MyLanguage/Hosting\_services & hosting services & 1 & 200\\
+\hline
+/wiki/Special:MyLanguage/How\_to\_contribute & Contribute & 1 & 200\\
+\hline
+/wiki/Special:MyLanguage/How\_to\_contribute & Get involved & 1 & 200\\
+\hline
+/wiki/Special:MyLanguage/How\_to\_report\_a\_bug & Report wrong software behaviour or a feature proposal & 1 & 200\\
+\hline
+/wiki/Special:MyLanguage/Localisation & multilingual & 1 & 200\\
+\hline
+/wiki/Special:MyLanguage/Manual:Common\_errors\_and\_symptoms & errors and symptoms & 1 & 200\\
+\hline
+/wiki/Special:MyLanguage/Manual:Contents & Technical manual & 1 & 200\\
+\hline
+/wiki/Special:MyLanguage/Manual:Deciding\_whether\_to\_use\_a\_wiki\_as\_your\_website\_type & if MediaWiki is right for you & 1 & 200\\
+\hline
+/wiki/Special:MyLanguage/Manual:Extensions & extensions & 1 & 200\\
+\hline
+/wiki/Special:MyLanguage/Manual:Installing\_MediaWiki & install & 1 & 200\\
+\hline
+/wiki/Special:MyLanguage/Manual:System\_administration & configure & 1 & 200\\
+\hline
+/wiki/Special:MyLanguage/Manual:What\_is\_MediaWiki\%3F & Find out more & 1 & 200\\
+\hline
+/wiki/Special:MyLanguage/MediaWiki\_Stakeholders\%27\_Group & MediaWiki Stakeholders & 1 & 200\\
+\hline
+/wiki/Special:MyLanguage/MediaWiki\_testimonials & thousands of companies and organisations & 1 & 200\\
+\hline
+/wiki/Special:MyLanguage/Professional\_development\_and\_consulting & Get professional development and consulting & 1 & 200\\
+\hline
+/wiki/Special:MyLanguage/Project:Language\_policy & Languages: & 1 & 200\\
+\hline
+/wiki/Special:MyLanguage/Sites\_using\_MediaWiki & tens of thousands of websites & 1 & 200\\
+\hline
+/wiki/Special:MyLanguage/Wikimedia\_Hackathon\_2024 & Wikimedia Hackathon 2024 & 1 & 200\\
+\hline
+/wiki/Special:MyTalk & Talk & 1 & 200\\
+\hline
+/wiki/Special:Random & Random page & 1 & 200\\
+\hline
+/wiki/Special:RecentChanges & Recent changes & 1 & 200\\
+\hline
+/wiki/Special:RecentChangesLinked/MediaWiki & Related changes & 1 & 200\\
+\hline
+/wiki/Special:Search & Search & 1 & 200\\
+\hline
+/wiki/Special:SpecialPages & Special pages & 1 & 200\\
+\hline
+/wiki/Special:WhatLinksHere/MediaWiki & What links here & 1 & 200\\
+\hline
+/wiki/Talk:MediaWiki & Discussion & 1 & 200\\
+\hline
+/wiki/Template:Main\_page & English & 1 & 200\\
+\hline
+/wiki/Wikimedia\_Hackathon\_2024 &  & 1 & 200\\
+\hline
+https://commons.wikimedia.org/wiki/Main\_Page & Wikimedia Commons & 1 & 200\\
+\hline
+https://creativecommons.org/licenses/by-sa/4.0/ & Creative Commons Attribution-ShareAlike License & 1 & 200\\
+\hline
+https://creativecommons.org/publicdomain/zero/1.0/ & Creative Commons CC0 License & 1 & 200\\
+\hline
+https://developer.wikimedia.org & Developers & 1 & 200\\
+\hline
+https://developer.wikimedia.org & Wikimedia Developer Portal & 1 & 200\\
+\hline
+https://developer.wikimedia.org/ & Developer portal & 1 & 200\\
+\hline
+https://en.wikibooks.org/wiki/Main\_Page & Wikibooks & 1 & 200\\
+\hline
+https://en.wikinews.org/wiki/Main\_Page & Wikinews & 1 & 200\\
+\hline
+https://en.wikipedia.org/wiki/FLOSS & free and open & 1 & 200\\
+\hline
+https://en.wikipedia.org/wiki/Main\_Page & Wikipedia & 1 & 200\\
+\hline
+https://en.wikiquote.org/wiki/Main\_Page & Wikiquote & 1 & 200\\
+\hline
+https://en.wikisource.org/wiki/Main\_Page & Wikisource & 1 & 200\\
+\hline
+https://en.wikiversity.org/wiki/Wikiversity:Main\_Page & Wikiversity & 1 & 200\\
+\hline
+https://en.wikivoyage.org/wiki/Main\_Page & Wikivoyage & 1 & 200\\
+\hline
+https://en.wiktionary.org/wiki/Wiktionary:Main\_Page & Wiktionary & 1 & 200\\
+\hline
+https://foundation.wikimedia.org/wiki/Home & Wikimedia Foundation & 1 & 200\\
+\hline
+https://foundation.wikimedia.org/wiki/Special:MyLanguage/Policy:Cookie\_statement & Cookie statement & 1 & 200\\
+\hline
+https://foundation.wikimedia.org/wiki/Special:MyLanguage/Policy:Privacy\_policy & Privacy Policy & 1 & 200\\
+\hline
+https://foundation.wikimedia.org/wiki/Special:MyLanguage/Policy:Privacy\_policy & Privacy policy & 1 & 200\\
+\hline
+https://foundation.wikimedia.org/wiki/Special:MyLanguage/Policy:Terms\_of\_Use & Terms of Use & 1 & 200\\
+\hline
+https://lists.wikimedia.org/hyperkitty/list/mediawiki-announce@lists.wikimedia.org/thread/5NYC4UZLY3MWQZ6DYJAUQRJG2ZHZFBJ6/ & MediaWiki 1.41.x versions & 1 & 200\\
+\hline
+https://lists.wikimedia.org/hyperkitty/list/wikitech-l@lists.wikimedia.org/thread/PFTE5RHUERS6KTUGGRZO7XXV5THNJ77E/ & Maintenance release: 1.39.11, 1.41.5 and 1.42.4 & 1 & 200\\
+\hline
+https://lists.wikimedia.org/hyperkitty/list/wikitech-l@lists.wikimedia.org/thread/UYZUOQEWN2NL22PU42JW7TF6JO56RWWV/ & MediaWiki 1.43.0 & 1 & 200\\
+\hline
+https://meta.wikimedia.org/wiki/Main\_Page & Meta-Wiki & 1 & 200\\
+\hline
+https://outreach.wikimedia.org/wiki/Main\_Page & Wikimedia Outreach & 1 & 200\\
+\hline
+https://species.wikimedia.org/wiki/Main\_Page & Wikispecies & 1 & 200\\
+\hline
+https://stats.wikimedia.org/\#/www.mediawiki.org & Statistics & 1 & 200\\
+\hline
+https://techblog.wikimedia.org/ & Tech blog & 1 & 200\\
+\hline
+https://wikimania.wikimedia.org/wiki/Wikimania & Wikimania & 1 & 200\\
+\hline
+https://wikimediafoundation.org/ &  & 1 & 200\\
+\hline
+https://wikisource.org/wiki/Main\_Page & Multilingual Wikisource & 1 & 200\\
+\hline
+https://www.mediawiki.org/ &  & 1 & 200\\
+\hline
+https://www.mediawiki.org/w/index.php?title=MediaWiki\&oldid=6287429 & https://www.mediawiki.org/w/index.php?title=MediaWiki\&oldid=6287429 & 1 & 200\\
+\hline
+https://www.mediawiki.org/wiki/Special:MyLanguage/Code\_of\_Conduct & Code of Conduct & 1 & 200\\
+\hline
+https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents & the Help: namespace & 1 & 200\\
+\hline
+https://www.mediawiki.org/wiki/Special:MyLanguage/News & More news & 1 & 200\\
+\hline
+https://www.mediawiki.org/wiki/Template:Main\_page/af & Afrikaans & 1 & 200\\
+\hline
+https://www.mediawiki.org/wiki/Template:Main\_page/ar & العربية & 1 & 200\\
+\hline
+https://www.mediawiki.org/wiki/Template:Main\_page/ast & asturianu & 1 & 200\\
+\hline
+https://www.mediawiki.org/wiki/Template:Main\_page/az & azərbaycanca & 1 & 200\\
+\hline
+https://www.mediawiki.org/wiki/Template:Main\_page/be & беларуская & 1 & 200\\
+\hline
+https://www.mediawiki.org/wiki/Template:Main\_page/be-tarask & беларуская (тарашкевіца) & 1 & 200\\
+\hline
+https://www.mediawiki.org/wiki/Template:Main\_page/bg & български & 1 & 200\\
+\hline
+https://www.mediawiki.org/wiki/Template:Main\_page/bn & বাংলা & 1 & 200\\
+\hline
+https://www.mediawiki.org/wiki/Template:Main\_page/bs & bosanski & 1 & 200\\
+\hline
+https://www.mediawiki.org/wiki/Template:Main\_page/ca & català & 1 & 200\\
+\hline
+https://www.mediawiki.org/wiki/Template:Main\_page/ckb & کوردی & 1 & 200\\
+\hline
+https://www.mediawiki.org/wiki/Template:Main\_page/cs & čeština & 1 & 200\\
+\hline
+https://www.mediawiki.org/wiki/Template:Main\_page/da & dansk & 1 & 200\\
+\hline
+https://www.mediawiki.org/wiki/Template:Main\_page/de & Deutsch & 1 & 200\\
+\hline
+https://www.mediawiki.org/wiki/Template:Main\_page/el & Ελληνικά & 1 & 200\\
+\hline
+https://www.mediawiki.org/wiki/Template:Main\_page/es & español & 1 & 200\\
+\hline
+https://www.mediawiki.org/wiki/Template:Main\_page/fa & فارسی & 1 & 200\\
+\hline
+https://www.mediawiki.org/wiki/Template:Main\_page/fi & suomi & 1 & 200\\
+\hline
+https://www.mediawiki.org/wiki/Template:Main\_page/fr & français & 1 & 200\\
+\hline
+https://www.mediawiki.org/wiki/Template:Main\_page/gl & galego & 1 & 200\\
+\hline
+https://www.mediawiki.org/wiki/Template:Main\_page/gu & ગુજરાતી & 1 & 200\\
+\hline
+https://www.mediawiki.org/wiki/Template:Main\_page/he & עברית & 1 & 200\\
+\hline
+https://www.mediawiki.org/wiki/Template:Main\_page/hi & हिन्दी & 1 & 200\\
+\hline
+https://www.mediawiki.org/wiki/Template:Main\_page/hr & hrvatski & 1 & 200\\
+\hline
+https://www.mediawiki.org/wiki/Template:Main\_page/hu & magyar & 1 & 200\\
+\hline
+https://www.mediawiki.org/wiki/Template:Main\_page/hy & հայերեն & 1 & 200\\
+\hline
+https://www.mediawiki.org/wiki/Template:Main\_page/id & Bahasa Indonesia & 1 & 200\\
+\hline
+https://www.mediawiki.org/wiki/Template:Main\_page/it & italiano & 1 & 200\\
+\hline
+https://www.mediawiki.org/wiki/Template:Main\_page/ja & 日本語 & 1 & 200\\
+\hline
+https://www.mediawiki.org/wiki/Template:Main\_page/jv & Jawa & 1 & 200\\
+\hline
+https://www.mediawiki.org/wiki/Template:Main\_page/kk & қазақша & 1 & 200\\
+\hline
+https://www.mediawiki.org/wiki/Template:Main\_page/ko & 한국어 & 1 & 200\\
+\hline
+https://www.mediawiki.org/wiki/Template:Main\_page/ms & Bahasa Melayu & 1 & 200\\
+\hline
+https://www.mediawiki.org/wiki/Template:Main\_page/mwl & Mirandés & 1 & 200\\
+\hline
+https://www.mediawiki.org/wiki/Template:Main\_page/nl & Nederlands & 1 & 200\\
+\hline
+https://www.mediawiki.org/wiki/Template:Main\_page/pl & polski & 1 & 200\\
+\hline
+https://www.mediawiki.org/wiki/Template:Main\_page/pt & português & 1 & 200\\
+\hline
+https://www.mediawiki.org/wiki/Template:Main\_page/pt-br & português do Brasil & 1 & 200\\
+\hline
+https://www.mediawiki.org/wiki/Template:Main\_page/ro & română & 1 & 200\\
+\hline
+https://www.mediawiki.org/wiki/Template:Main\_page/ru & русский & 1 & 200\\
+\hline
+https://www.mediawiki.org/wiki/Template:Main\_page/sc & sardu & 1 & 200\\
+\hline
+https://www.mediawiki.org/wiki/Template:Main\_page/si & සිංහල & 1 & 200\\
+\hline
+https://www.mediawiki.org/wiki/Template:Main\_page/sk & slovenčina & 1 & 200\\
+\hline
+https://www.mediawiki.org/wiki/Template:Main\_page/sl & slovenščina & 1 & 200\\
+\hline
+https://www.mediawiki.org/wiki/Template:Main\_page/so & Soomaaliga & 1 & 200\\
+\hline
+https://www.mediawiki.org/wiki/Template:Main\_page/sq & shqip & 1 & 200\\
+\hline
+https://www.mediawiki.org/wiki/Template:Main\_page/sr & српски / srpski & 1 & 200\\
+\hline
+https://www.mediawiki.org/wiki/Template:Main\_page/sv & svenska & 1 & 200\\
+\hline
+https://www.mediawiki.org/wiki/Template:Main\_page/syl & ꠍꠤꠟꠐꠤ & 1 & 200\\
+\hline
+https://www.mediawiki.org/wiki/Template:Main\_page/th & ไทย & 1 & 200\\
+\hline
+https://www.mediawiki.org/wiki/Template:Main\_page/tr & Türkçe & 1 & 200\\
+\hline
+https://www.mediawiki.org/wiki/Template:Main\_page/uk & українська & 1 & 200\\
+\hline
+https://www.mediawiki.org/wiki/Template:Main\_page/vi & Tiếng Việt & 1 & 200\\
+\hline
+https://www.mediawiki.org/wiki/Template:Main\_page/yue & 粵語 & 1 & 200\\
+\hline
+https://www.mediawiki.org/wiki/Template:Main\_page/zh & 中文 & 1 & 200\\
+\hline
+https://www.wikidata.org/wiki/Special:EntityPage/Q5296 & Wikidata item & 1 & 200\\
+\hline
+https://www.wikidata.org/wiki/Wikidata:Main\_Page & Wikidata & 1 & 200\\
+\hline
+https://www.wikifunctions.org/wiki/Wikifunctions:Main\_Page & Wikifunctions & 1 & 200\\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Pregunta 2:}\label{pregunta-2}
+
+Elaborad, usando las librerías de gráficos base y qplot (ggplot2), una
+infografía sobre los datos obtenidos. Tal infografía será una reunión de
+gráficos donde se muestren los siguientes detalles:
+
+\#\#1 Un histograma con la frecuencia de aparición de los enlaces, pero
+separado por URLs absolutas (con ``http\ldots{}'') y URLs relativas.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{geom\_col}\NormalTok{(}\AttributeTok{data =}\NormalTok{ links\_relative, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ href\_full, }\AttributeTok{y =}\NormalTok{ freq, }\AttributeTok{fill =} \StringTok{"Relative"}\NormalTok{), }\AttributeTok{width =} \FloatTok{0.6}\NormalTok{, }\AttributeTok{position =} \StringTok{"identity"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_col}\NormalTok{(}\AttributeTok{data =}\NormalTok{ links\_absolute, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ href\_full, }\AttributeTok{y =}\NormalTok{ freq, }\AttributeTok{fill =} \StringTok{"Absolute"}\NormalTok{), }\AttributeTok{width =} \FloatTok{0.6}\NormalTok{, }\AttributeTok{position =} \StringTok{"identity"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}
+    \AttributeTok{title =} \StringTok{"Frecuencia de aparcion de enlaces absolutos y relativos"}\NormalTok{,}
+    \AttributeTok{x =} \StringTok{"Enlace"}\NormalTok{,}
+    \AttributeTok{y =} \StringTok{"Frequencia"}\NormalTok{,}
+    \AttributeTok{fill =} \StringTok{"Tipo de enlace"}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_manual}\NormalTok{(}
+    \AttributeTok{labels =} \FunctionTok{c}\NormalTok{(}\StringTok{"Relative"} \OtherTok{=} \StringTok{"Enlaces relativos"}\NormalTok{, }\StringTok{"Absolute"} \OtherTok{=} \StringTok{"Enlaces absolutos"}\NormalTok{),}
+    \AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{"Relative"} \OtherTok{=} \StringTok{"blue"}\NormalTok{, }\StringTok{"Absolute"} \OtherTok{=} \StringTok{"red"}\NormalTok{)}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{legend.position =} \StringTok{"right"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Practica2_files/figure-latex/pregunta_2_grafico_1-1.pdf}
+\#\# 2 Un gráfico de barras indicando la suma de enlaces que apuntan a
+otros dominios o servicios (distinto a \url{https://www.mediawiki.org}
+en el caso de ejemplo) vs.~la suma de los otros enlaces. Aquí queremos
+distinguir enlaces que apuntan a mediawiki versus el resto. Sabemos que
+las URLs relativas ya apuntan dentro, por lo tanto hay que analizar las
+URLs absolutas y comprobar que apunten a
+\url{https://www.mediawiki.org}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(links\_counts, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ link\_type, }\AttributeTok{y =}\NormalTok{ total, }\AttributeTok{fill =}\NormalTok{ link\_type)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_bar}\NormalTok{(}\AttributeTok{stat =} \StringTok{"identity"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}
+    \AttributeTok{title =} \StringTok{"Enlaces externos vs internos"}\NormalTok{,}
+    \AttributeTok{x =} \StringTok{"Tipo de enlace"}\NormalTok{,}
+    \AttributeTok{y =} \StringTok{"Número de enlaces"}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_manual}\NormalTok{(}
+    \AttributeTok{name   =} \StringTok{"Tipo de Enlace"}\NormalTok{,}
+    \AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{"internal"} \OtherTok{=} \StringTok{"blue"}\NormalTok{, }\StringTok{"external"} \OtherTok{=} \StringTok{"red"}\NormalTok{),}
+    \AttributeTok{labels =} \FunctionTok{c}\NormalTok{(}\StringTok{"internal"} \OtherTok{=} \StringTok{"Internos"}\NormalTok{, }\StringTok{"external"} \OtherTok{=} \StringTok{"Externos"}\NormalTok{)}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{legend.position =} \StringTok{"right"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Practica2_files/figure-latex/pregunta_2_grafico_2-1.pdf}
+\#\# 3 Un gráfico de tarta (pie chart) indicando los porcentajes de
+Status de nuestro análisis. Por ejemplo, si hay 6 enlaces con status
+``200'' y 4 enlaces con status ``404'', la tarta mostrará un 60\% con la
+etiqueta ``200'' y un 40\% con la etiqueta ``404''. Este gráfico lo
+uniremos a los anteriores. El objetivo final es obtener una imagen que
+recopile los gráficos generados.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(status\_percentage, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =} \StringTok{""}\NormalTok{, }\AttributeTok{y =}\NormalTok{ total, }\AttributeTok{fill =}\NormalTok{ status)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_col}\NormalTok{(}\AttributeTok{width =} \DecValTok{1}\NormalTok{, }\AttributeTok{color =} \StringTok{"white"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{coord\_polar}\NormalTok{(}\StringTok{"y"}\NormalTok{, }\AttributeTok{start =} \DecValTok{0}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}
+    \AttributeTok{title =} \StringTok{"Estado de los enlaces"}\NormalTok{,}
+    \AttributeTok{fill  =} \StringTok{"Estado"}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{theme\_void}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{legend.position =} \StringTok{"right"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Practica2_files/figure-latex/pregunta_2_grafico_3-1.pdf}
+
+\end{document}

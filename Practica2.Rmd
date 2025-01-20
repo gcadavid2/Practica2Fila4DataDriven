@@ -1,7 +1,10 @@
 ---
-title: "Practica2"
-output: html_document
-date: "2025-01-13"
+title: "Práctica 2"
+author: "Guillermo Cadavid, Pau Pous"
+output:
+  html_document: default
+  pdf_document: default
+date: "2025-01-20"
 ---
 
 ```{r setup, include=FALSE}
@@ -63,7 +66,12 @@ check_link <- function(href) {
 check_link_v <- Vectorize(check_link)
 ```
 
-```{r read_and_process_raw_data, include=FALSE}
+
+## Pregunta 1
+
+**1. Descargar la página web de la URL indicada, y almacenarlo en un formato de R apto para ser tratado.**
+
+```{r read_and_process_raw_data, include=TRUE}
 html <- read_html(BASE_URL_CONST)
 
 title <- html %>%
@@ -76,8 +84,15 @@ raw_links <- data.frame(
   text = a_objects %>% html_text()
 )
 
-# raw_links <- raw_links %>% slice_head(n = 50) # processa nomes el top 10
+head(raw_links)
 ```
+
+**2. Analizar el contenido de la web, buscando el título de la página (que en HTML se etiqueta como “title”).**
+
+
+El title es: **`r title`**
+
+**3. Analizar el contenido de la web, buscando todos los enlaces (que en HTML se etiquetan como “a”), buscando el texto del enlace, así como la URL.**
 
 ```{r transform_data, include=FALSE}
 if (!USE_CACHE_DATA) {
@@ -92,9 +107,16 @@ if (!USE_CACHE_DATA) {
 }
 ```
 
-```{r display_data}
-load("links.Rda")
+**4. Generar una tabla con cada enlace encontrado, indicando el texto que acompaña el enlace, y el número de veces que aparece un enlace con ese mismo objetivo.**
 
+
+**5. Para cada enlace, seguirlo e indicar si está activo (podemos usar el código de status HTTP al hacer una petición a esa URL).**
+
+```{r load_data, include=FALSE}
+load("links.Rda")
+```
+
+```{r display_data}
 links %>%
   arrange(desc(freq)) %>%
   select(-is_absoulte, -href_full) %>%
@@ -106,6 +128,11 @@ links %>%
   kable_styling(bootstrap_options = c("responsive"))
 ```
 
+## Pregunta 2
+
+Elaborad, usando las librerías de gráficos base y qplot (ggplot2), una infografía sobre los
+datos obtenidos. Tal infografía será una reunión de gráficos donde se muestren los
+siguientes detalles:
 
 ```{r pregunta_2, include=FALSE}
 links_absolute <- filter(links, is_absoulte) %>%
@@ -127,6 +154,7 @@ status_percentage <- links %>%
 status_percentage$status <- factor(status_percentage$status)
 ```
 
+**1. Un histograma con la frecuencia de aparición de los enlaces, pero separado por URLs absolutas (con “http…”) y URLs relativas.**
 
 ```{r pregunta_2_grafico_1}
 ggplot() +
@@ -145,6 +173,13 @@ ggplot() +
   theme(legend.position = "right")
 ```
 
+**2. Un gráfico de barras indicando la suma de enlaces que apuntan a otros**
+
+dominios o servicios (distinto a https://www.mediawiki.org en el caso de
+ejemplo) vs. la suma de los otros enlaces.
+Aquí queremos distinguir enlaces que apuntan a mediawiki versus el resto.
+Sabemos que las URLs relativas ya apuntan dentro, por lo tanto hay que analizar
+las URLs absolutas y comprobar que apunten a https://www.mediawiki.org.
 ```{r pregunta_2_grafico_2}
 ggplot(links_counts, aes(x = link_type, y = total, fill = link_type)) +
   geom_bar(stat = "identity") +
@@ -160,6 +195,13 @@ ggplot(links_counts, aes(x = link_type, y = total, fill = link_type)) +
   ) +
   theme(legend.position = "right")
 ```
+
+**3. Un gráfico de tarta (pie chart) indicando los porcentajes de Status de nuestro análisis.**
+
+Por ejemplo, si hay 6 enlaces con status “200” y 4 enlaces con status “404”, la
+tarta mostrará un 60% con la etiqueta “200” y un 40% con la etiqueta “404”. Este
+gráfico lo uniremos a los anteriores. El objetivo final es obtener una imagen que
+recopile los gráficos generados.
 
 ```{r pregunta_2_grafico_3}
 ggplot(status_percentage, aes(x = "", y = total, fill = status)) +
