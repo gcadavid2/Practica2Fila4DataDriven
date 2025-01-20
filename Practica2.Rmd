@@ -21,11 +21,13 @@ require(tidyr)
 require(ggplot2)
 ```
 
-```{r globals, include=FALSE}
+## Configuracion
+
+```{r globals, include=TRUE}
 FULL_URL_CONST <- "https://www.mediawiki.org/wiki/MediaWiki/"
 BASE_URL_CONST <- "https://www.mediawiki.org/"
 
-# Set to TRUE to not scrape the data from the link and use the cached (saved) data.
+# Si TRUE, cargara los datos locales ya descargados y no realizara ninguna peticion a la pagina web para scraping.
 USE_CACHE_DATA <- TRUE
 ```
 
@@ -71,12 +73,24 @@ check_link_v <- Vectorize(check_link)
 
 **1. Descargar la página web de la URL indicada, y almacenarlo en un formato de R apto para ser tratado.**
 
-```{r read_and_process_raw_data, include=TRUE}
+```{r, include=TRUE}
 html <- read_html(BASE_URL_CONST)
+```
+
+**2. Analizar el contenido de la web, buscando el título de la página (que en HTML se etiqueta como “title”).**
+
+```{r}
 
 title <- html %>%
   html_elements("title") %>%
   html_text2()
+```
+
+El title es: **`r title`**
+
+**3. Analizar el contenido de la web, buscando todos los enlaces (que en HTML se etiquetan como “a”), buscando el texto del enlace, así como la URL.**
+
+```{r }
 a_objects <- html %>% html_elements("a")
 
 raw_links <- data.frame(
@@ -85,16 +99,14 @@ raw_links <- data.frame(
 )
 
 head(raw_links)
+
 ```
 
-**2. Analizar el contenido de la web, buscando el título de la página (que en HTML se etiqueta como “title”).**
+**4. Generar una tabla con cada enlace encontrado, indicando el texto que acompaña el enlace, y el número de veces que aparece un enlace con ese mismo objetivo.**
 
+**5. Para cada enlace, seguirlo e indicar si está activo (podemos usar el código de status HTTP al hacer una petición a esa URL).**
 
-El title es: **`r title`**
-
-**3. Analizar el contenido de la web, buscando todos los enlaces (que en HTML se etiquetan como “a”), buscando el texto del enlace, así como la URL.**
-
-```{r transform_data, include=FALSE}
+```{r transform_and_dispolay_data, include=TRUE}
 if (!USE_CACHE_DATA) {
   links <- raw_links %>%
     na.omit() %>%
@@ -105,18 +117,11 @@ if (!USE_CACHE_DATA) {
     mutate(status = check_link_v(href_full))
   save(links, file = "links.Rda")
 }
-```
 
-**4. Generar una tabla con cada enlace encontrado, indicando el texto que acompaña el enlace, y el número de veces que aparece un enlace con ese mismo objetivo.**
-
-
-**5. Para cada enlace, seguirlo e indicar si está activo (podemos usar el código de status HTTP al hacer una petición a esa URL).**
-
-```{r load_data, include=FALSE}
+if (USE_CACHE_DATA) {
 load("links.Rda")
-```
+}
 
-```{r display_data}
 links %>%
   arrange(desc(freq)) %>%
   select(-is_absoulte, -href_full) %>%
@@ -173,13 +178,8 @@ ggplot() +
   theme(legend.position = "right")
 ```
 
-**2. Un gráfico de barras indicando la suma de enlaces que apuntan a otros**
+**2. Un gráfico de barras indicando la suma de enlaces que apuntan a otros dominios o servicios vs. la suma de los otros enlaces.**
 
-dominios o servicios (distinto a https://www.mediawiki.org en el caso de
-ejemplo) vs. la suma de los otros enlaces.
-Aquí queremos distinguir enlaces que apuntan a mediawiki versus el resto.
-Sabemos que las URLs relativas ya apuntan dentro, por lo tanto hay que analizar
-las URLs absolutas y comprobar que apunten a https://www.mediawiki.org.
 ```{r pregunta_2_grafico_2}
 ggplot(links_counts, aes(x = link_type, y = total, fill = link_type)) +
   geom_bar(stat = "identity") +
@@ -197,11 +197,6 @@ ggplot(links_counts, aes(x = link_type, y = total, fill = link_type)) +
 ```
 
 **3. Un gráfico de tarta (pie chart) indicando los porcentajes de Status de nuestro análisis.**
-
-Por ejemplo, si hay 6 enlaces con status “200” y 4 enlaces con status “404”, la
-tarta mostrará un 60% con la etiqueta “200” y un 40% con la etiqueta “404”. Este
-gráfico lo uniremos a los anteriores. El objetivo final es obtener una imagen que
-recopile los gráficos generados.
 
 ```{r pregunta_2_grafico_3}
 ggplot(status_percentage, aes(x = "", y = total, fill = status)) +
